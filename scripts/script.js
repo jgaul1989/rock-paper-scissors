@@ -17,41 +17,59 @@ function getPlayerChoice() {
 
 function playRound(playerChoice, computerChoice) {
     if (playerChoice === computerChoice) {
-        return `Tie! You picked ${playerChoice} and the computer picked ${computerChoice}.`;
+         alert(`Tie! You picked ${playerChoice} and the computer picked ${computerChoice}.`);
+         return 2;
     }
     let playerWon;
     switch (playerChoice) {
         case "rock":
             computerChoice === "scissors" ? playerWon = true : playerWon = false;
             if (playerWon) {
-                return `You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`;
+                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
+                return 1;
             } else {
-                return `You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`;
+                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
+                return 0;
             }
         case "paper":
             computerChoice === "rock" ? playerWon = true : playerWon = false;
             if (playerWon) {
-                return `You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`;
+                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
+                return 1;
             } else {
-                return `You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`;
+                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
+                return 0;
             }
         case "scissors":
             computerChoice === "paper" ? playerWon = true : playerWon = false;
             if (playerWon) {
-                return `You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`;
+                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
+                return 1;
             } else {
-                return `You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`;
+                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
+                return 0;
             }
         
         default:
-            return 'You need to pick rock, paper or scissors!';
+            alert(`You lose! You need to choose rock, paper or scissors!`);
+            return 0;
     }
 }
 
 function playGame() {
-    let playerChoice = getPlayerChoice();
-    let computerChoice = getComputerChoice();
-    console.log(playRound(playerChoice, computerChoice));
+    let playerWins = 0;
+    let playerTies = 0;
+    for (let i = 0; i < 5; i++ ) {
+        let playerChoice = getPlayerChoice();
+        let computerChoice = getComputerChoice();
+        let gameResult = playRound(playerChoice, computerChoice);
+        if (gameResult === 2) {
+            playerTies += 1;
+        } else {
+            playerWins += gameResult;
+        }
+    }
+    alert(`Game Results: Victories: ${playerWins}, Defeats: ${5 - (playerWins + playerTies)}, and Ties: ${playerTies}`);
 }
 
 
