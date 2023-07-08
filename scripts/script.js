@@ -1,6 +1,19 @@
+const gameChoices = document.querySelectorAll(".game-choices");
+
+gameChoices.forEach((choice) => {
+    choice.addEventListener("click", playerSelection);
+});
+
+function playerSelection(e) {
+    let playerChoice = e.target.getAttribute('id');
+        result = playRound(playerChoice, getComputerChoice);
+        incrementRoundCounter();
+        updateGameScore(result);
+        checkGameOver();
+}
+
 function getComputerChoice() {
     let computerChoice = Math.floor(Math.random() * 3);
-    
     switch(computerChoice) {
         case 0:
             return "rock";
@@ -11,66 +24,85 @@ function getComputerChoice() {
     }
 }
 
-function getPlayerChoice() {
-    return prompt("Rock, paper or scissors?").trim().toLowerCase();
-}
-
-function playRound(playerChoice, computerChoice) {
+function playRound(playerChoice) {
+    const computerChoice = getComputerChoice();
     if (playerChoice === computerChoice) {
-         alert(`Tie! You picked ${playerChoice} and the computer picked ${computerChoice}.`);
-         return 2;
+        displayRoundResults(`Tie! You picked ${playerChoice} and the computer picked ${computerChoice}.`); 
+        return "tie";
     }
     let playerWon;
     switch (playerChoice) {
         case "rock":
             computerChoice === "scissors" ? playerWon = true : playerWon = false;
-            if (playerWon) {
-                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
-                return 1;
-            } else {
-                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
-                return 0;
-            }
+            break;
         case "paper":
             computerChoice === "rock" ? playerWon = true : playerWon = false;
-            if (playerWon) {
-                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
-                return 1;
-            } else {
-                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
-                return 0;
-            }
+            break;
         case "scissors":
             computerChoice === "paper" ? playerWon = true : playerWon = false;
-            if (playerWon) {
-                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
-                return 1;
-            } else {
-                alert(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
-                return 0;
-            }
-        
-        default:
-            alert(`You lose! You need to choose rock, paper or scissors!`);
-            return 0;
+            break;
+    }
+    if(playerWon) {
+        displayRoundResults(`You chose ${playerChoice} and the computer chose ${computerChoice}. You won!`);
+        return "win";
+    } else {
+        displayRoundResults(`You chose ${playerChoice} and the computer chose ${computerChoice}. You lose!`);
+        return "loss";
     }
 }
 
-function playGame() {
-    let playerWins = 0;
-    let playerTies = 0;
-    for (let i = 0; i < 5; i++ ) {
-        let playerChoice = getPlayerChoice();
-        let computerChoice = getComputerChoice();
-        let gameResult = playRound(playerChoice, computerChoice);
-        if (gameResult === 2) {
-            playerTies += 1;
-        } else {
-            playerWins += gameResult;
-        }
+function displayRoundResults(roundResults) {
+    const resultsContainer = document.querySelector(".round-results");
+    if (resultsContainer.childElementCount > 1) {
+        resultsContainer.removeChild(resultsContainer.lastChild);
     }
-    alert(`Game Results: Victories: ${playerWins}, Defeats: ${5 - (playerWins + playerTies)}, and Ties: ${playerTies}`);
+    const results = document.createElement("p");
+    results.textContent = roundResults;
+    resultsContainer.appendChild(results);
 }
+
+function incrementRoundCounter() {
+    const curRound = document.querySelector("#cur-round");
+    let nextRound = parseInt((curRound.textContent)) + 1;
+    curRound.textContent = nextRound;
+}
+
+function updateGameScore(roundResult) {
+    let curScore;
+    switch(roundResult) {
+        case "win":
+            curScore = document.querySelector("#num-wins");
+            break;
+        case "loss":
+            curScore = document.querySelector("#num-losses");
+            break;
+        case "tie":
+            curScore = document.querySelector("#num-ties");
+    }
+    let newScore = parseInt(curScore.textContent) + 1;
+    curScore.textContent = newScore;
+}
+
+function checkGameOver() {
+    const numWins = parseInt(document.querySelector("#num-wins").textContent);
+    const numLosses = parseInt(document.querySelector("#num-losses").textContent);
+    if (numWins >= 5) {
+        endGame("Congratulations! You won the game!");
+    } else if (numLosses >= 5) {
+        endGame("You lost the game!");
+    }
+}
+
+function endGame(gameResults) {
+    gameChoices.forEach((choice) => {
+        choice.removeEventListener("click",playerSelection);
+    })
+    const resultsContainer = document.querySelector(".round-results");
+    const results = document.createElement("p");
+    results.textContent = gameResults;
+    resultsContainer.appendChild(results);
+}
+
 
 
 
