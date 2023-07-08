@@ -101,6 +101,18 @@ function endGame(gameResults) {
     const results = document.createElement("p");
     results.textContent = gameResults;
     resultsContainer.appendChild(results);
+    displayPlayAgainBtn();
+}
+
+function displayPlayAgainBtn() {
+    const screenContainer = document.querySelector(".container");
+    const playAgainBtn = document.createElement("button");
+    playAgainBtn.classList.toggle("play-again");
+    playAgainBtn.textContent = "Play Again";
+    screenContainer.appendChild(playAgainBtn);
+    playAgainBtn.addEventListener("click", () => {
+        window.location.reload(true);
+    });
 }
 
 
